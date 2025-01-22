@@ -105,93 +105,93 @@
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
 
-<script>
-// Mengambil data dari URL API
-fetch('https://opendata.bandung.go.id/api/bigdata/kecamatan_antapani/tk_mdrn_brdsrkn_klrhn_d_kcmtn_ntpn_kt_bndng?sort=id%3Aasc&page=1&per_page=100&where=%7B%22kemendagri_nama_desa_kelurahan%22%3A%5B%22ANTAPANI+KIDUL%22%5D%7D&where_or=%7B%7D') // Ganti dengan URL API yang valid
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        if (data.code === 200) {
-            displayDataTable(data.data);
-            displayChart(data.data);
-        } else {
-            console.error('Error:', data.message);
-        }
-    })
-    .catch(error => console.error('Error:', error));
+	<script>
+	// Mengambil data dari URL API
+	fetch('https://opendata.bandung.go.id/api/bigdata/kecamatan_antapani/tk_mdrn_brdsrkn_klrhn_d_kcmtn_ntpn_kt_bndng?sort=id%3Aasc&page=1&per_page=100&where=%7B%22kemendagri_nama_desa_kelurahan%22%3A%5B%22ANTAPANI+KIDUL%22%5D%7D&where_or=%7B%7D') // Ganti dengan URL API yang valid
+		.then(response => response.json())
+		.then(data => {
+			console.log(data);
+			if (data.code === 200) {
+				displayDataTable(data.data);
+				displayChart(data.data);
+			} else {
+				console.error('Error:', data.message);
+			}
+		})
+		.catch(error => console.error('Error:', error));
 
-// Fungsi untuk menampilkan DataTable dengan tombol download
-function displayDataTable(data) {
-    const tableBody = document.getElementById('tableBody');
-    tableBody.innerHTML = ''; // Clear existing data
+	// Fungsi untuk menampilkan DataTable dengan tombol download
+	function displayDataTable(data) {
+		const tableBody = document.getElementById('tableBody');
+		tableBody.innerHTML = ''; // Clear existing data
 
-    data.forEach(item => {
-        const row = `<tr>
-            <td>${item.kemendagri_kode_desa_kelurahan}</td>
-            <td>${item.bps_kode_desa_kelurahan}</td>
-            <td>${item.kemendagri_nama_desa_kelurahan}</td>
-            <td>${item.nama_toko}</td>
-            <td>${item.alamat}</td>
-            <td>${item.tahun}</td>
-        </tr>`;
-        tableBody.innerHTML += row;
-    });
+		data.forEach(item => {
+			const row = `<tr>
+				<td>${item.kemendagri_kode_desa_kelurahan}</td>
+				<td>${item.bps_kode_desa_kelurahan}</td>
+				<td>${item.kemendagri_nama_desa_kelurahan}</td>
+				<td>${item.nama_toko}</td>
+				<td>${item.alamat}</td>
+				<td>${item.tahun}</td>
+			</tr>`;
+			tableBody.innerHTML += row;
+		});
 
-    $('#dataTable').DataTable({
-        responsive: true,
-		searching: false,
-		info: false,
-		dom: 'Bfrtip', // Menambahkan tombol di atas tabel
-        pagination: true,
-		buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print' // Tombol download yang tersedia
-        ]
-    }); // Initialize DataTable
-}
+		$('#dataTable').DataTable({
+			responsive: true,
+			searching: false,
+			info: false,
+			dom: 'Bfrtip', // Menambahkan tombol di atas tabel
+			pagination: true,
+			buttons: [
+				'copy', 'csv', 'excel', 'pdf', 'print' // Tombol download yang tersedia
+			]
+		}); // Initialize DataTable
+	}
 
-// Fungsi untuk menghitung total per jenjang_sekolah
-function calculateTotals(data) {
-    const totals = {};
+	// Fungsi untuk menghitung total per jenjang_sekolah
+	function calculateTotals(data) {
+		const totals = {};
 
-    data.forEach(item => {
-        const tahun = item.tahun;
-        if (!totals[tahun]) {
-            totals[tahun] = 0; // Inisialisasi jika belum ada
-        }
-        totals[tahun] += 1; // Hitung jumlah sekolah per jenjang
-    });
+		data.forEach(item => {
+			const tahun = item.tahun;
+			if (!totals[tahun]) {
+				totals[tahun] = 0; // Inisialisasi jika belum ada
+			}
+			totals[tahun] += 1; // Hitung jumlah sekolah per jenjang
+		});
 
-    return totals;
-}
+		return totals;
+	}
 
-// Fungsi untuk menampilkan grafik dengan Chart.js
-function displayChart(data) {
-    const ctx = document.getElementById('myChart').getContext('2d');
-    const labels = data.map(item => `${item.tahun}`);
-    const values = data.map(item => item.jumlah);
+	// Fungsi untuk menampilkan grafik dengan Chart.js
+	function displayChart(data) {
+		const ctx = document.getElementById('myChart').getContext('2d');
+		const labels = data.map(item => `${item.tahun}`);
+		const values = data.map(item => item.jumlah);
 
-    const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: '',
-                data: values,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-}
-</script>
+		const myChart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: labels,
+				datasets: [{
+					label: '',
+					data: values,
+					backgroundColor: 'rgba(75, 192, 192, 0.2)',
+					borderColor: 'rgba(75, 192, 192, 1)',
+					borderWidth: 1
+				}]
+			},
+			options: {
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				}
+			}
+		});
+	}
+	</script>
    
 </body>
 </html>
